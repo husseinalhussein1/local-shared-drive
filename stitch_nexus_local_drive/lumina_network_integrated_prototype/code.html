@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumina Network | Professional File Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-hover:hover {
+            border-color: rgba(0, 209, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.1);
+        }
+        body {
+            background-color: #0B0F19;
+            color: #dfe2f1;
+            overflow-x: hidden;
+        }
+        .view-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "surface-dim": "#0f131d",
+                        "surface-container-low": "#171b26",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-background": "#dfe2f1",
+                        "outline": "#859399",
+                        "on-tertiary": "#442b00",
+                        "surface": "#0f131d",
+                        "surface-container": "#1c1f2a",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-tertiary-container": "#6b4700",
+                        "background": "#0f131d",
+                        "secondary-container": "#3a4a5f",
+                        "on-primary-fixed": "#001f28",
+                        "primary-fixed": "#b7eaff",
+                        "surface-container-high": "#262a35",
+                        "on-primary-fixed-variant": "#004e60",
+                        "secondary": "#b7c8e1",
+                        "on-secondary-fixed": "#0b1c30",
+                        "inverse-on-surface": "#2c303b",
+                        "outline-variant": "#3c494e",
+                        "primary-container": "#00d1ff",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-variant": "#313540",
+                        "on-surface": "#dfe2f1",
+                        "on-secondary-container": "#a9bad3",
+                        "inverse-surface": "#dfe2f1",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffba49",
+                        "on-primary-container": "#00566a",
+                        "on-tertiary-fixed-variant": "#624000",
+                        "on-primary": "#003543",
+                        "tertiary-fixed": "#ffddb1",
+                        "inverse-primary": "#00677f",
+                        "on-surface-variant": "#bbc9cf",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#4cd6ff",
+                        "tertiary": "#ffd59c",
+                        "on-tertiary-fixed": "#291800",
+                        "surface-container-lowest": "#0a0e18",
+                        "on-secondary": "#213145",
+                        "tertiary-container": "#feb127",
+                        "surface-container-highest": "#313540",
+                        "surface-bright": "#353944",
+                        "primary": "#a4e6ff",
+                        "on-error": "#690005",
+                        "surface-tint": "#4cd6ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "container-max": "1440px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "gutter": "20px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md-desktop": ["Geist"],
+                        "body-sm": ["Geist"],
+                        "label-mono": ["Geist"],
+                        "body-base": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "headline-md": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-md-mobile": ["20px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-mono": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-body-base text-on-surface">
+<!-- MASTER SIMULATION BAR -->
+<div class="fixed top-0 left-0 w-full z-[100] bg-surface-container-lowest/80 backdrop-blur-md border-b border-white/10 px-lg py-sm flex flex-col md:flex-row justify-between items-center gap-sm">
+<div class="flex items-center gap-md">
+<span class="font-label-mono text-primary uppercase text-[10px] tracking-widest opacity-70">Simulation Engine</span>
+<div class="flex bg-white/5 rounded-lg p-1 border border-white/5">
+<button class="px-md py-1 text-label-mono rounded-md transition-all bg-white/10 text-primary" id="btn-view-login" onclick="switchView('login')">Login</button>
+<button class="px-md py-1 text-label-mono rounded-md transition-all hover:bg-white/5" id="btn-view-explorer" onclick="switchView('explorer')">Explorer</button>
+<button class="px-md py-1 text-label-mono rounded-md transition-all hover:bg-white/5" id="btn-view-admin" onclick="switchView('admin')">Admin Insights</button>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<span class="font-label-mono text-secondary uppercase text-[10px] tracking-widest opacity-70">Current Identity</span>
+<div class="flex bg-white/5 rounded-lg p-1 border border-white/5">
+<button class="px-md py-1 text-label-mono rounded-md transition-all bg-white/10 text-primary" id="role-user" onclick="setRole('user')">User</button>
+<button class="px-md py-1 text-label-mono rounded-md transition-all hover:bg-white/5" id="role-user_plus" onclick="setRole('user_plus')">User Plus</button>
+<button class="px-md py-1 text-label-mono rounded-md transition-all hover:bg-white/5" id="role-admin" onclick="setRole('admin')">Admin</button>
+</div>
+</div>
+</div>
+<!-- MAIN SHELL -->
+<div class="pt-32 md:pt-16 min-h-screen" id="main-shell">
+<!-- TOP NAV BAR (Shared Component Context) -->
+<header class="hidden fixed top-16 md:top-16 w-full z-50 bg-white/3 dark:bg-white/3 backdrop-blur-xl border-b border-white/10 shadow-sm flex justify-between items-center px-lg h-16 w-full" id="nav-shell">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md font-bold text-primary">Lumina Network</span>
+<div class="hidden md:flex gap-md ml-xl">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-base text-body-base" href="#">User</a>
+<a class="text-on-surface-variant font-medium hover:bg-white/5 transition-colors font-body-base text-body-base px-2 rounded" href="#">User Plus</a>
+<a class="text-on-surface-variant font-medium hover:bg-white/5 transition-colors font-body-base text-body-base px-2 rounded" href="#">Admin</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">settings</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="A professional close-up headshot of a corporate user with a clean, tech-focused aesthetic. The person is smiling slightly against a soft-focus laboratory background with cool blue tones and subtle light flares, matching the Lumina Network branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA52ILTfLiYDd0LeSl695dIIi79MQCMv0KFrokPY-25mKnOM7Xx0Z_pdo-wVrG8d9YjSZyrZogWYJVoybjOJR4pzPN2C-FLARbTJ-DyUt5VS4dxZgWsx5Ut3gv3FGCBW5-7TsYdA0vTfZ8Flj0u9bsx5Gw6dfErkRdI0OwKndYdtfd-b0z7gDGJabc7U-6T2G_PMtDw1Vbk6Vwf-a-U4mq_8MWMqhzhCrJFVWN9TwV1Fysoj5UeTmMozcY7yiiigk47d2ylgLC_6U8"/>
+</div>
+</div>
+</header>
+<!-- SIDE NAV BAR (Shared Component Context) -->
+<aside class="hidden fixed left-0 top-[128px] md:top-32 h-[calc(100vh-128px)] md:h-[calc(100vh-64px)] w-64 bg-white/3 dark:bg-white/3 backdrop-blur-3xl border-r border-white/8 flex flex-col py-md gap-sm transition-all z-40" id="sidebar-shell">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-primary text-3xl">hub</span>
+<div>
+<p class="font-headline-md text-lg text-on-surface font-bold">Lumina</p>
+<p class="font-label-mono text-[10px] opacity-60">Network Drive</p>
+</div>
+</div>
+<button class="mt-md w-full py-sm bg-primary-container text-on-primary-container rounded-lg font-label-mono flex items-center justify-center gap-2 active:scale-95 transition-transform" id="upload-btn">
+<span class="material-symbols-outlined text-sm">upload</span>
+                    Upload File
+                </button>
+</div>
+<nav class="flex-1 px-sm">
+<a class="flex items-center gap-md px-md py-3 text-primary border-l-2 border-primary bg-primary/10 font-label-mono transition-all" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+                    All Files
+                </a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-white/5 font-label-mono transition-all" href="#">
+<span class="material-symbols-outlined">share</span>
+                    Shared with Me
+                </a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-white/5 font-label-mono transition-all" href="#">
+<span class="material-symbols-outlined">schedule</span>
+                    Recent
+                </a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-white/5 font-label-mono transition-all" href="#" onclick="switchView('admin')">
+<span class="material-symbols-outlined">dashboard</span>
+                    Admin Dashboard
+                </a>
+</nav>
+<div class="p-md mt-auto">
+<div class="bg-white/5 rounded-xl p-md border border-white/5">
+<div class="flex justify-between items-center mb-xs">
+<span class="font-label-mono text-[10px] opacity-60">Storage Status</span>
+<span class="font-label-mono text-[10px] text-primary">82%</span>
+</div>
+<div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[82%] rounded-full shadow-[0_0_10px_rgba(0,209,255,0.5)]"></div>
+</div>
+<p class="mt-sm font-label-mono text-[9px] opacity-40">8.2 GB of 10 GB used</p>
+</div>
+</div>
+</aside>
+<!-- CONTENT CANVAS -->
+<main class="transition-all duration-500 min-h-[calc(100vh-64px)]" id="content-canvas">
+<!-- VIEW: LOGIN -->
+<section class="flex items-center justify-center min-h-[calc(100vh-128px)] p-md" id="view-login">
+<div class="glass max-w-md w-full p-xl rounded-2xl relative overflow-hidden">
+
+<div class="relative z-10 text-center mb-xl">
+<span class="material-symbols-outlined text-5xl text-primary mb-md">lock_open</span>
+<h1 class="font-display-lg text-3xl mb-xs">Lumina Gate</h1>
+<p class="text-on-surface-variant font-body-sm">Secure local network authentication</p>
+</div>
+<div class="space-y-lg relative z-10">
+<div>
+<label class="font-label-mono text-[10px] uppercase opacity-60 block mb-xs">Network Identifier</label>
+<input class="w-full bg-white/5 border-0 border-b border-white/20 focus:ring-0 focus:border-primary transition-all text-on-surface py-sm" type="email" value="admin@lumina.local"/>
+</div>
+<div>
+<label class="font-label-mono text-[10px] uppercase opacity-60 block mb-xs">Access Cipher</label>
+<input class="w-full bg-white/5 border-0 border-b border-white/20 focus:ring-0 focus:border-primary transition-all text-on-surface py-sm" type="password" value="••••••••"/>
+</div>
+<button class="w-full py-md bg-primary text-on-primary font-bold rounded-lg hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/20" onclick="switchView('explorer')">
+                            Establish Connection
+                        </button>
+</div>
+<div class="mt-xl text-center relative z-10">
+<p class="font-label-mono text-[10px] opacity-40">SYSTEM STATUS: <span class="text-emerald-400">OPERATIONAL</span></p>
+</div>
+</div>
+</section>
+<!-- VIEW: EXPLORER -->
+<section class="hidden ml-0 md:ml-64 p-lg" id="view-explorer">
+<div class="max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+<div>
+<h2 class="font-display-lg text-4xl mb-xs">Drive Explorer</h2>
+<p class="text-on-surface-variant font-body-base">Managed node: <span class="text-primary font-label-mono">LN-04-DEEP-CORE</span></p>
+</div>
+<div class="flex items-center gap-sm">
+<div class="bg-white/5 px-md py-sm rounded-lg border border-white/10 flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+<input class="bg-transparent border-none focus:ring-0 p-0 text-body-sm w-48" placeholder="Search archive..." type="text"/>
+</div>
+<button class="glass p-sm rounded-lg glass-hover">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="glass p-sm rounded-lg glass-hover">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-lg">
+<!-- File Card 1 -->
+<div class="glass p-lg rounded-xl glass-hover group transition-all">
+<div class="flex justify-between items-start mb-md">
+<span class="material-symbols-outlined text-4xl text-primary/80 group-hover:text-primary transition-colors">description</span>
+<button class="role-restricted material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded">more_vert</button>
+</div>
+<h3 class="font-headline-md text-lg truncate mb-xs">Research_01.pdf</h3>
+<div class="flex flex-col gap-xs opacity-60">
+<div class="flex justify-between font-label-mono text-[10px]">
+<span>Size</span>
+<span>12.4 MB</span>
+</div>
+<div class="flex justify-between font-label-mono text-[10px]">
+<span>Modified</span>
+<span>Oct 12, 2023</span>
+</div>
+<div class="flex items-center gap-2 font-label-mono text-[10px] mt-xs">
+<div class="w-4 h-4 rounded-full bg-secondary/30 flex items-center justify-center text-[8px]">JD</div>
+<span>Dr. Jane Doe</span>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-white/5 flex gap-sm">
+<button class="flex-1 py-xs text-xs font-label-mono bg-white/10 rounded hover:bg-white/20 transition-colors">Download</button>
+<button class="role-restricted hidden p-xs bg-error/10 text-error rounded hover:bg-error/20 transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button>
+</div>
+</div>
+<!-- File Card 2 -->
+<div class="glass p-lg rounded-xl glass-hover group transition-all">
+<div class="flex justify-between items-start mb-md">
+<span class="material-symbols-outlined text-4xl text-emerald-400/80 group-hover:text-emerald-400 transition-colors">image</span>
+<button class="role-restricted material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded">more_vert</button>
+</div>
+<h3 class="font-headline-md text-lg truncate mb-xs">Site_Map.png</h3>
+<div class="flex flex-col gap-xs opacity-60">
+<div class="flex justify-between font-label-mono text-[10px]">
+<span>Size</span>
+<span>4.8 MB</span>
+</div>
+<div class="flex justify-between font-label-mono text-[10px]">
+<span>Modified</span>
+<span>Nov 05, 2023</span>
+</div>
+<div class="flex items-center gap-2 font-label-mono text-[10px] mt-xs">
+<div class="w-4 h-4 rounded-full bg-primary/30 flex items-center justify-center text-[8px]">AM</div>
+<span>Arch Master</span>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-white/5 flex gap-sm">
+<button class="flex-1 py-xs text-xs font-label-mono bg-white/10 rounded hover:bg-white/20 transition-colors">Download</button>
+<button class="role-restricted hidden p-xs bg-error/10 text-error rounded hover:bg-error/20 transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button>
+</div>
+</div>
+<!-- File Card 3 -->
+<div class="glass p-lg rounded-xl glass-hover group transition-all">
+<div class="flex justify-between items-start mb-md">
+<span class="material-symbols-outlined text-4xl text-tertiary/80 group-hover:text-tertiary transition-colors">folder_zip</span>
+<button class="role-restricted material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded">more_vert</button>
+</div>
+<h3 class="font-headline-md text-lg truncate mb-xs">Archive.zip</h3>
+<div class="flex flex-col gap-xs opacity-60">
+<div class="flex justify-between font-label-mono text-[10px]">
+<span>Size</span>
+<span>2.1 GB</span>
+</div>
+<div class="flex justify-between font-label-mono text-[10px]">
+<span>Modified</span>
+<span>Dec 01, 2023</span>
+</div>
+<div class="flex items-center gap-2 font-label-mono text-[10px] mt-xs">
+<div class="w-4 h-4 rounded-full bg-on-surface-variant/30 flex items-center justify-center text-[8px]">AD</div>
+<span>Admin</span>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-white/5 flex gap-sm">
+<button class="flex-1 py-xs text-xs font-label-mono bg-white/10 rounded hover:bg-white/20 transition-colors">Download</button>
+<button class="role-restricted hidden p-xs bg-error/10 text-error rounded hover:bg-error/20 transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- VIEW: ADMIN INSIGHTS -->
+<section class="hidden ml-0 md:ml-64 p-lg" id="view-admin">
+<!-- 403 Access Denied (Hidden by default) -->
+<div class="hidden flex flex-col items-center justify-center min-h-[614px] text-center" id="admin-restricted">
+<div class="w-24 h-24 bg-error/10 rounded-full flex items-center justify-center mb-lg border border-error/20">
+<span class="material-symbols-outlined text-error text-6xl" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<h2 class="font-display-lg text-4xl mb-md">403 Access Denied</h2>
+<p class="text-on-surface-variant max-w-md mx-auto mb-xl">Your current identity credentials do not allow access to the network's administrative core. Please elevate your clearance level.</p>
+<button class="px-xl py-md bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-label-mono" onclick="switchView('explorer')">Return to Safety</button>
+</div>
+<!-- Admin Metrics Dashboard -->
+<div class="max-w-container-max mx-auto" id="admin-content">
+<h2 class="font-display-lg text-4xl mb-xl">Network Overview</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-xl">
+<div class="glass p-lg rounded-xl relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<span class="font-label-mono text-xs opacity-50 uppercase">Total Files</span>
+<span class="material-symbols-outlined text-primary">description</span>
+</div>
+<p class="text-4xl font-bold">142</p>
+<p class="font-label-mono text-[10px] text-emerald-400 mt-2">+12% from last week</p>
+</div>
+<div class="glass p-lg rounded-xl relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<span class="font-label-mono text-xs opacity-50 uppercase">Network Traffic</span>
+<span class="material-symbols-outlined text-primary">sync_alt</span>
+</div>
+<p class="text-4xl font-bold">84.5 GB</p>
+<div class="w-full h-1 bg-white/10 mt-4 rounded-full">
+<div class="w-3/4 h-full bg-primary shadow-[0_0_8px_rgba(0,209,255,0.4)]"></div>
+</div>
+</div>
+<div class="glass p-lg rounded-xl relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<span class="font-label-mono text-xs opacity-50 uppercase">Active Users</span>
+<span class="material-symbols-outlined text-primary">group</span>
+</div>
+<p class="text-4xl font-bold">24</p>
+<div class="flex -space-x-2 mt-4">
+<div class="w-6 h-6 rounded-full border border-surface-dim bg-primary/40"></div>
+<div class="w-6 h-6 rounded-full border border-surface-dim bg-secondary/40"></div>
+<div class="w-6 h-6 rounded-full border border-surface-dim bg-tertiary/40"></div>
+<div class="w-6 h-6 rounded-full border border-surface-dim bg-surface-variant flex items-center justify-center text-[8px]">+21</div>
+</div>
+</div>
+</div>
+<div class="glass rounded-xl overflow-hidden">
+<div class="px-lg py-md border-b border-white/10 flex justify-between items-center">
+<h3 class="font-headline-md text-lg">Activity Log</h3>
+<button class="text-xs font-label-mono text-primary hover:underline">Export CSV</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-white/2 border-b border-white/5 font-label-mono text-[10px] uppercase opacity-50">
+<tr>
+<th class="px-lg py-md">File Name</th>
+<th class="px-lg py-md">Uploader</th>
+<th class="px-lg py-md">Downloaders</th>
+<th class="px-lg py-md">Timestamp</th>
+<th class="px-lg py-md">Action</th>
+</tr>
+</thead>
+<tbody class="text-sm divide-y divide-white/5">
+<tr class="hover:bg-white/2 transition-colors">
+<td class="px-lg py-md font-medium">Research_01.pdf</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+<span>dr_jane_doe</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex gap-1">
+<span class="px-2 py-0.5 bg-white/10 rounded-full text-[10px]">arch_master</span>
+<span class="px-2 py-0.5 bg-white/10 rounded-full text-[10px]">+4 more</span>
+</div>
+</td>
+<td class="px-lg py-md opacity-60">2023-12-05 14:20</td>
+<td class="px-lg py-md">
+<span class="px-2 py-1 rounded text-[10px] bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 uppercase tracking-tighter">Uploaded</span>
+</td>
+</tr>
+<tr class="hover:bg-white/2 transition-colors">
+<td class="px-lg py-md font-medium">System_Manifest.json</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-white/20"></div>
+<span>system_root</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex gap-1">
+<span class="px-2 py-0.5 bg-white/10 rounded-full text-[10px]">sys_admin</span>
+</div>
+</td>
+<td class="px-lg py-md opacity-60">2023-12-05 12:05</td>
+<td class="px-lg py-md">
+<span class="px-2 py-1 rounded text-[10px] bg-primary/10 text-primary border border-primary/20 uppercase tracking-tighter">Modified</span>
+</td>
+</tr>
+<tr class="hover:bg-white/2 transition-colors">
+<td class="px-lg py-md font-medium">Old_Backup_Node.tar.gz</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-white/20"></div>
+<span>legacy_user</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="opacity-30">None</span>
+</td>
+<td class="px-lg py-md opacity-60">2023-12-04 18:45</td>
+<td class="px-lg py-md">
+<span class="px-2 py-1 rounded text-[10px] bg-error/10 text-error border border-error/20 uppercase tracking-tighter">Purged</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Micro-interaction Scripts -->
+<script>
+        let currentState = {
+            view: 'login',
+            role: 'user'
+        };
+
+        function switchView(viewName) {
+            currentState.view = viewName;
+            
+            // UI Transition logic
+            const canvas = document.getElementById('content-canvas');
+            const nav = document.getElementById('nav-shell');
+            const sidebar = document.getElementById('sidebar-shell');
+            
+            // Update Active Buttons in Simulator
+            ['login', 'explorer', 'admin'].forEach(v => {
+                const btn = document.getElementById(`btn-view-${v}`);
+                btn.classList.remove('bg-white/10', 'text-primary');
+                if(v === viewName) {
+                    btn.classList.add('bg-white/10', 'text-primary');
+                }
+            });
+
+            // Handle View Visibility
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-explorer').classList.add('hidden');
+            document.getElementById('view-admin').classList.add('hidden');
+            
+            const selectedView = document.getElementById(`view-${viewName}`);
+            selectedView.classList.remove('hidden');
+            
+            // Contextual Shell Visibility (The Filter)
+            if (viewName === 'login') {
+                nav.classList.add('hidden');
+                sidebar.classList.add('hidden');
+            } else {
+                nav.classList.remove('hidden');
+                sidebar.classList.remove('hidden');
+            }
+
+            // Handle Admin Restrictions
+            if (viewName === 'admin') {
+                const adminRestricted = document.getElementById('admin-restricted');
+                const adminContent = document.getElementById('admin-content');
+                if (currentState.role !== 'admin') {
+                    adminRestricted.classList.remove('hidden');
+                    adminContent.classList.add('hidden');
+                } else {
+                    adminRestricted.classList.add('hidden');
+                    adminContent.classList.remove('hidden');
+                }
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setRole(roleName) {
+            currentState.role = roleName;
+            
+            // Update buttons in simulator
+            ['user', 'user_plus', 'admin'].forEach(r => {
+                const btn = document.getElementById(`role-${r}`);
+                btn.classList.remove('bg-white/10', 'text-primary');
+                if(r === roleName) {
+                    btn.classList.add('bg-white/10', 'text-primary');
+                }
+            });
+
+            // Update UI based on Role (Role Logic)
+            const uploadBtn = document.getElementById('upload-btn');
+            const restrictedElements = document.querySelectorAll('.role-restricted');
+            
+            if (roleName === 'user') {
+                uploadBtn.classList.add('hidden');
+                restrictedElements.forEach(el => el.classList.add('hidden'));
+            } else {
+                uploadBtn.classList.remove('hidden');
+                restrictedElements.forEach(el => el.classList.remove('hidden'));
+            }
+
+            // Refresh Admin view if currently on it
+            if (currentState.view === 'admin') {
+                switchView('admin');
+            }
+        }
+
+        // Initialize with default state
+        document.addEventListener('DOMContentLoaded', () => {
+            switchView('login');
+            setRole('user');
+        });
+    </script>
+</body></html>

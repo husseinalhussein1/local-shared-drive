@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumina Network - Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100;300;400;500;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Geist', sans-serif;
+            background-color: #0b0f19;
+            color: #dfe2f1;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(0, 209, 255, 0.25);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .active-indicator {
+            box-shadow: 0 0 15px rgba(0, 209, 255, 0.4);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 209, 255, 0.3);
+        }
+        
+        @keyframes pulse-cyan {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .status-pulse {
+            animation: pulse-cyan 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed": "#291800",
+                      "inverse-on-surface": "#2c303b",
+                      "primary-fixed": "#b7eaff",
+                      "tertiary-fixed-dim": "#ffba49",
+                      "tertiary-fixed": "#ffddb1",
+                      "error": "#ffb4ab",
+                      "on-primary-fixed": "#001f28",
+                      "surface-container-low": "#171b26",
+                      "on-primary-fixed-variant": "#004e60",
+                      "outline-variant": "#3c494e",
+                      "on-error": "#690005",
+                      "inverse-surface": "#dfe2f1",
+                      "outline": "#859399",
+                      "on-primary": "#003543",
+                      "surface-container-lowest": "#0a0e18",
+                      "on-tertiary-container": "#6b4700",
+                      "tertiary": "#ffd59c",
+                      "secondary-container": "#3a4a5f",
+                      "secondary-fixed": "#d3e4fe",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-fixed": "#0b1c30",
+                      "surface-container-highest": "#313540",
+                      "surface-bright": "#353944",
+                      "on-surface": "#dfe2f1",
+                      "tertiary-container": "#feb127",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "inverse-primary": "#00677f",
+                      "primary-container": "#00d1ff",
+                      "secondary": "#b7c8e1",
+                      "surface-variant": "#313540",
+                      "on-surface-variant": "#bbc9cf",
+                      "on-secondary": "#213145",
+                      "surface-dim": "#0f131d",
+                      "primary-fixed-dim": "#4cd6ff",
+                      "primary": "#a4e6ff",
+                      "surface-container-high": "#262a35",
+                      "on-tertiary-fixed-variant": "#624000",
+                      "background": "#0f131d",
+                      "surface-tint": "#4cd6ff",
+                      "on-tertiary": "#442b00",
+                      "on-background": "#dfe2f1",
+                      "surface-container": "#1c1f2a",
+                      "on-primary-container": "#00566a",
+                      "error-container": "#93000a",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "surface": "#0f131d",
+                      "on-secondary-container": "#a9bad3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "container-max": "1440px",
+                      "sm": "8px",
+                      "xs": "4px",
+                      "gutter": "20px",
+                      "xl": "48px",
+                      "lg": "24px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "body-sm": ["Geist"],
+                      "label-mono": ["Geist"],
+                      "headline-md": ["Geist"],
+                      "body-base": ["Geist"],
+                      "display-lg": ["Geist"],
+                      "headline-md-mobile": ["Geist"]
+              },
+              "fontSize": {
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "label-mono": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                      "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "headline-md-mobile": ["20px", {"lineHeight": "1.3", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white/3 dark:bg-white/3 backdrop-blur-xl border-b border-white/10 shadow-sm flex justify-between items-center px-lg h-16 w-full">
+<div class="flex items-center gap-xl">
+<span class="font-headline-md text-headline-md font-bold text-primary">Lumina Network</span>
+<div class="hidden md:flex gap-md items-center">
+<a class="font-body-base text-body-base text-on-surface-variant font-medium hover:bg-white/5 transition-colors px-md py-xs rounded" href="#">User</a>
+<a class="font-body-base text-body-base text-on-surface-variant font-medium hover:bg-white/5 transition-colors px-md py-xs rounded" href="#">User Plus</a>
+<a class="font-body-base text-body-base text-primary font-bold border-b-2 border-primary pb-1" href="#">Admin</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-white/5 border-none rounded-full pl-10 pr-4 py-1.5 text-body-sm focus:ring-1 focus:ring-primary-container w-64 transition-all" placeholder="Search system logs..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 p-2 rounded-full transition-colors active:scale-95">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 p-2 rounded-full transition-colors active:scale-95">settings</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="A professional close-up headshot of a network administrator in a modern, high-tech server room setting. The lighting is dominated by cool blue and cyan glows from server racks, reflecting off the subject's glasses. The aesthetic is clean and corporate, matching a high-end technical dashboard environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbu5aCLXBGNNPCIDHyNSIWozpexfoJS4RYLjGfkdb_gKKluhEdAJv1f3CjHvWnvMZVBrF3aujxWJr4CajJ1m-M6ZzyJ7oOj5zb_QSP3OvRUP7-RXYp9TkFsEmMyeCsQXUFiZPOaqmlYdC9I-VHpLy5M2w_-iWYWuJaFMAGVX6DyQr4I_0YATR7Hk1LjXiImUc5aS1BXJgisiutRVfZvAwqgONPv6_g1E7nl6dTc8VrVxMooCsefkQzzcTS43zIUjBPV7Ii3tlVtco"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-white/3 dark:bg-white/3 backdrop-blur-3xl border-r border-white/8 flex flex-col py-md gap-sm transition-all duration-200 ease-in-out">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-md px-sm py-md">
+<div class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cloud_queue</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface text-[18px]">Lumina</h2>
+<p class="font-label-mono text-label-mono text-on-surface-variant opacity-60">Network Drive</p>
+</div>
+</div>
+<button class="w-full mt-md bg-primary-container text-on-primary-container py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:brightness-110 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">upload</span>
+                Upload File
+            </button>
+</div>
+<nav class="flex-1 space-y-1 px-sm">
+<a class="flex items-center gap-md px-md py-3 font-label-mono text-label-mono text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-white/5 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span>All Files</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 font-label-mono text-label-mono text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-white/5 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">share</span>
+<span>Shared with Me</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 font-label-mono text-label-mono text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-white/5 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">schedule</span>
+<span>Recent</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 font-label-mono text-label-mono text-primary border-l-2 border-primary bg-primary/10 rounded-r-lg transition-all active-indicator" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Admin Dashboard</span>
+</a>
+</nav>
+<div class="px-md mt-auto pt-lg border-t border-white/5">
+<div class="p-md bg-white/5 rounded-xl space-y-md">
+<div class="flex justify-between items-center">
+<span class="font-label-mono text-label-mono text-on-surface-variant">Storage Status</span>
+<span class="material-symbols-outlined text-primary text-[18px]">cloud_queue</span>
+</div>
+<div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[42%] active-indicator"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant opacity-60">842 GB of 2 TB used</p>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 mt-16 p-xl min-h-screen relative">
+<!-- Background Animation Overlay -->
+<div class="fixed inset-0 pointer-events-none opacity-20 -z-10">
+
+</div>
+<header class="mb-xl flex justify-between items-end">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Network Overview</h1>
+<p class="font-body-base text-body-base text-on-surface-variant opacity-80">Full access administrative control panel for Lumina Node-01.</p>
+</div>
+<div class="flex gap-md">
+<div class="glass-panel px-md py-2 rounded-xl flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-primary-container status-pulse"></span>
+<span class="font-label-mono text-label-mono uppercase tracking-widest text-primary">Role: Admin</span>
+</div>
+</div>
+</header>
+<!-- Top Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-xl">
+<!-- Total Files -->
+<div class="glass-panel p-lg rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<p class="font-label-mono text-label-mono text-on-surface-variant mb-md flex items-center justify-between">
+                        Total Files
+                        <span class="material-symbols-outlined text-primary opacity-50 group-hover:opacity-100 transition-opacity">folder</span>
+</p>
+<h3 class="text-display-lg font-display-lg text-on-surface mb-xs">1,284</h3>
+<p class="text-body-sm text-primary-container flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">trending_up</span> +12% from last week
+                    </p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700">
+<span class="material-symbols-outlined text-[120px]">inventory_2</span>
+</div>
+</div>
+<!-- Storage Used -->
+<div class="glass-panel p-lg rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<p class="font-label-mono text-label-mono text-on-surface-variant mb-md flex items-center justify-between">
+                        Storage Used
+                        <span class="material-symbols-outlined text-primary opacity-50 group-hover:opacity-100 transition-opacity">database</span>
+</p>
+<div class="flex items-baseline gap-xs">
+<h3 class="text-display-lg font-display-lg text-on-surface">842</h3>
+<span class="text-body-base text-on-surface-variant">GB / 2 TB</span>
+</div>
+<div class="mt-md w-full h-2 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full w-[42%] shadow-[0_0_10px_rgba(0,209,255,0.5)]"></div>
+</div>
+</div>
+</div>
+<!-- Active Users -->
+<div class="glass-panel p-lg rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<p class="font-label-mono text-label-mono text-on-surface-variant mb-md flex items-center justify-between">
+                        Active Users
+                        <span class="material-symbols-outlined text-primary opacity-50 group-hover:opacity-100 transition-opacity">group</span>
+</p>
+<h3 class="text-display-lg font-display-lg text-on-surface mb-xs">42</h3>
+<div class="flex -space-x-2 mt-md">
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up of a professional woman with a soft tech-focused background. Minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0MqtsUF16K5czp258YpMpznqk84oS246KjQesm8txOqPqbyQjP7YyVqC8xqrFhSHEw_dUqxaMYehJGGPKu1mw_eikPGt8jt-SVtyqxDtYZDV20Bu7L8NKGCEWL8_a749pGuaNRnCEqj0eX3e7-Xse49oUJ6dYu4qsbHWRwiB8g0BAjuDhuxX48vvfaMd3T6rvXdH4g0DQJWy6BKe4nIpYPH4YbS5GyrLqDY5omLy91set-3oHHoJyPj8FAlRSoKl3H3vw9U7Rn-w"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a male engineer in a sleek professional attire, studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvvgVA0yHTIoCjfd-R0-ccHn-V-GY_y3aH7_LWIEOHc7ILmKaQ4hEzDoTjleTnXwOeQuXzM6tCct0uoHouAyCb9IzbKqe8nvW_GfvUXZIB02HFV-gdBHlNyehYfwWMHKasINq-zCKxPeC2bLHtYCpQkV_5dRRI9fsik2-AlJlyLy5NBQjFFcwO4KNDKP9hAf_ao77k1B3eeiWKlPa3UDNuC4LT2Jj4vLnE4aqh_6cCv0eQiE0qnq3BJrmgD26K6b9epgKU6Sxq_gw"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Modern high-resolution avatar of a software developer, clean tech lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCQZrDoMmn2IW8JG5-IWUaO3qVypsbSY_w3WuxLbk2koLiWLyJ8MsVCNvPvPgCIAAZphsV1xDymwKBC30c9vfxM8ci7t10zDxEg6vl0zg7JLgvpFg7WdUw5EeqPPndCPlxGsckEiT6RQvHGU_v0JBT04Uxf9UWJRsZmtoC8EFMEFnWapPG8QOEbe5k9cKtHIO8SfLWME4JFPqVDrz9lnL0dfwf4XsG1amGc87Sjic1whjJsN5wyh9IyR23ZT51Wic8a_HIlXemSwc"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background bg-surface-container-high flex items-center justify-center text-[10px] text-on-surface-variant font-bold">
+                            +39
+                        </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity Log -->
+<div class="glass-panel rounded-xl overflow-hidden">
+<div class="px-lg py-md border-b border-white/5 flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-on-surface text-[20px]">Activity Log</h2>
+<button class="text-body-sm text-primary hover:underline font-medium">Export CSV</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-white/2">
+<th class="px-lg py-md font-label-mono text-label-mono text-on-surface-variant uppercase tracking-wider">File Name</th>
+<th class="px-lg py-md font-label-mono text-label-mono text-on-surface-variant uppercase tracking-wider">Uploaded By</th>
+<th class="px-lg py-md font-label-mono text-label-mono text-on-surface-variant uppercase tracking-wider">Downloaded By</th>
+<th class="px-lg py-md font-label-mono text-label-mono text-on-surface-variant uppercase tracking-wider">Timestamp</th>
+<th class="px-lg py-md font-label-mono text-label-mono text-on-surface-variant uppercase tracking-wider">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="hover:bg-white/2 transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary opacity-60">description</span>
+<span class="font-body-base text-body-base">Quarterly_Report_2024.pdf</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-secondary-container flex items-center justify-center text-[10px] text-on-secondary-container">JD</div>
+<span class="font-body-sm text-body-sm">John Doe</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex flex-wrap gap-xs">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-medium border border-primary/20">A. Smith</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-medium border border-primary/20">M. Chen</span>
+</div>
+</td>
+<td class="px-lg py-md font-label-mono text-label-mono text-on-surface-variant opacity-80">
+                                2024-05-12 14:23:01
+                            </td>
+<td class="px-lg py-md">
+<span class="material-symbols-outlined text-primary-container text-sm">check_circle</span>
+</td>
+</tr>
+<tr class="hover:bg-white/2 transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-tertiary opacity-60">video_library</span>
+<span class="font-body-base text-body-base">Main_Presentation_Final.mp4</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-tertiary-container flex items-center justify-center text-[10px] text-on-tertiary-container">SK</div>
+<span class="font-body-sm text-body-sm">Sarah Kim</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex flex-wrap gap-xs">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-medium border border-primary/20">Admin</span>
+</div>
+</td>
+<td class="px-lg py-md font-label-mono text-label-mono text-on-surface-variant opacity-80">
+                                2024-05-12 13:45:12
+                            </td>
+<td class="px-lg py-md">
+<span class="material-symbols-outlined text-primary-container text-sm">check_circle</span>
+</td>
+</tr>
+<tr class="hover:bg-white/2 transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary opacity-60">folder_zip</span>
+<span class="font-body-base text-body-base">Dataset_Alpha_v2.zip</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-secondary-container flex items-center justify-center text-[10px] text-on-secondary-container">RH</div>
+<span class="font-body-sm text-body-sm">Robert Hill</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex flex-wrap gap-xs">
+<span class="px-2 py-0.5 rounded-full bg-white/5 text-on-surface-variant text-[11px] font-medium">None</span>
+</div>
+</td>
+<td class="px-lg py-md font-label-mono text-label-mono text-on-surface-variant opacity-80">
+                                2024-05-12 12:10:44
+                            </td>
+<td class="px-lg py-md">
+<span class="material-symbols-outlined text-primary-container text-sm">hourglass_empty</span>
+</td>
+</tr>
+<tr class="hover:bg-white/2 transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-error opacity-60">dangerous</span>
+<span class="font-body-base text-body-base">Suspicious_Script.sh</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-error-container flex items-center justify-center text-[10px] text-on-error-container">?</div>
+<span class="font-body-sm text-body-sm">External Access</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex flex-wrap gap-xs">
+<span class="px-2 py-0.5 rounded-full bg-error-container/20 text-error text-[11px] font-medium border border-error/20">Blocked</span>
+</div>
+</td>
+<td class="px-lg py-md font-label-mono text-label-mono text-on-surface-variant opacity-80">
+                                2024-05-12 11:55:20
+                            </td>
+<td class="px-lg py-md">
+<span class="material-symbols-outlined text-error text-sm">cancel</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-lg py-md border-t border-white/5 flex justify-between items-center bg-white/2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 4 of 1,284 activities</span>
+<div class="flex gap-sm">
+<button class="p-1 hover:bg-white/5 rounded border border-white/10 transition-colors"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<button class="p-1 hover:bg-white/5 rounded border border-white/10 transition-colors"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Bento Layout Extras -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mt-xl">
+<div class="glass-panel p-lg rounded-xl md:col-span-2">
+<h3 class="font-label-mono text-label-mono text-on-surface-variant mb-lg uppercase">System Load Analysis</h3>
+<div class="h-48 flex items-end justify-between px-md gap-4">
+<div class="w-full bg-primary/10 rounded-t-lg relative group h-[60%]">
+<div class="absolute inset-0 bg-primary/20 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-500 rounded-t-lg"></div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-lg relative group h-[40%]">
+<div class="absolute inset-0 bg-primary/20 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-500 rounded-t-lg"></div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-lg relative group h-[85%]">
+<div class="absolute inset-0 bg-primary/20 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-500 rounded-t-lg"></div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-lg relative group h-[70%]">
+<div class="absolute inset-0 bg-primary/20 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-500 rounded-t-lg"></div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-lg relative group h-[55%]">
+<div class="absolute inset-0 bg-primary/20 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-500 rounded-t-lg"></div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-lg relative group h-[95%]">
+<div class="absolute inset-0 bg-primary/20 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-500 rounded-t-lg active-indicator"></div>
+</div>
+</div>
+<div class="flex justify-between mt-md font-label-mono text-[10px] text-on-surface-variant opacity-50 px-md uppercase">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat (Peak)</span>
+</div>
+</div>
+<div class="glass-panel p-lg rounded-xl flex flex-col justify-between">
+<div>
+<h3 class="font-label-mono text-label-mono text-on-surface-variant mb-md uppercase">Node Health</h3>
+<div class="space-y-md">
+<div class="flex justify-between items-center">
+<span class="text-body-sm">Lumina-Node-Primary</span>
+<span class="text-[10px] px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full font-bold">STABLE</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-sm">Lumina-Node-Secondary</span>
+<span class="text-[10px] px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full font-bold">STABLE</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-sm">Storage-Array-01</span>
+<span class="text-[10px] px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded-full font-bold">HEAVY LOAD</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-lg py-2 rounded-lg border border-white/10 hover:bg-white/5 text-body-sm transition-all">Run Maintenance Diagnostic</button>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for hover effects on table rows
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.style.boxShadow = 'inset 0 0 15px rgba(0, 209, 255, 0.05)';
+            });
+            row.addEventListener('mouseleave', () => {
+                row.style.boxShadow = 'none';
+            });
+        });
+
+        // Simulating some metric updates
+        const activeUsersElement = document.querySelector('h3.text-display-lg:nth-of-type(3)');
+        if (activeUsersElement) {
+            setInterval(() => {
+                const current = parseInt(activeUsersElement.innerText);
+                const change = Math.floor(Math.random() * 3) - 1;
+                activeUsersElement.innerText = Math.max(38, current + change);
+            }, 5000);
+        }
+    </script>
+</body></html>

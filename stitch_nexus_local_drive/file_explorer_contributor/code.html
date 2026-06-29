@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 209, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.05);
+        }
+        .drop-zone-active {
+            border-color: #00d1ff !important;
+            background: rgba(0, 209, 255, 0.05) !important;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed": "#291800",
+                      "inverse-on-surface": "#2c303b",
+                      "primary-fixed": "#b7eaff",
+                      "tertiary-fixed-dim": "#ffba49",
+                      "tertiary-fixed": "#ffddb1",
+                      "error": "#ffb4ab",
+                      "on-primary-fixed": "#001f28",
+                      "surface-container-low": "#171b26",
+                      "on-primary-fixed-variant": "#004e60",
+                      "outline-variant": "#3c494e",
+                      "on-error": "#690005",
+                      "inverse-surface": "#dfe2f1",
+                      "outline": "#859399",
+                      "on-primary": "#003543",
+                      "surface-container-lowest": "#0a0e18",
+                      "on-tertiary-container": "#6b4700",
+                      "tertiary": "#ffd59c",
+                      "secondary-container": "#3a4a5f",
+                      "secondary-fixed": "#d3e4fe",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-fixed": "#0b1c30",
+                      "surface-container-highest": "#313540",
+                      "surface-bright": "#353944",
+                      "on-surface": "#dfe2f1",
+                      "tertiary-container": "#feb127",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "inverse-primary": "#00677f",
+                      "primary-container": "#00d1ff",
+                      "secondary": "#b7c8e1",
+                      "surface-variant": "#313540",
+                      "on-surface-variant": "#bbc9cf",
+                      "on-secondary": "#213145",
+                      "surface-dim": "#0f131d",
+                      "primary-fixed-dim": "#4cd6ff",
+                      "primary": "#a4e6ff",
+                      "surface-container-high": "#262a35",
+                      "on-tertiary-fixed-variant": "#624000",
+                      "background": "#0f131d",
+                      "surface-tint": "#4cd6ff",
+                      "on-tertiary": "#442b00",
+                      "on-background": "#dfe2f1",
+                      "surface-container": "#1c1f2a",
+                      "on-primary-container": "#00566a",
+                      "error-container": "#93000a",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "surface": "#0f131d",
+                      "on-secondary-container": "#a9bad3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "container-max": "1440px",
+                      "sm": "8px",
+                      "xs": "4px",
+                      "gutter": "20px",
+                      "xl": "48px",
+                      "lg": "24px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "body-sm": ["Geist"],
+                      "label-mono": ["Geist"],
+                      "headline-md": ["Geist"],
+                      "body-base": ["Geist"],
+                      "display-lg": ["Geist"],
+                      "headline-md-mobile": ["Geist"]
+              },
+              "fontSize": {
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "label-mono": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                      "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "headline-md-mobile": ["20px", {"lineHeight": "1.3", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-base min-h-screen selection:bg-primary/30">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white/3 dark:bg-white/3 backdrop-blur-xl border-b border-white/10 shadow-sm flex justify-between items-center px-lg h-16 w-full">
+<div class="flex items-center gap-xl">
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Lumina Network</span>
+<nav class="hidden md:flex gap-lg items-center">
+<a class="text-on-surface-variant font-medium hover:bg-white/5 transition-colors px-md py-1 rounded" href="#">User</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 px-md py-1" href="#">User Plus</a>
+<a class="text-on-surface-variant font-medium hover:bg-white/5 transition-colors px-md py-1 rounded" href="#">Admin</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 p-sm rounded transition-colors active:scale-95" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 p-sm rounded transition-colors active:scale-95" data-icon="settings">settings</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10 ml-sm">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a creative technologist in a dimly lit, high-tech studio environment. The lighting is cold and atmospheric with cyan rim lights, reflecting the Lumina Network aesthetic. The individual has a focused, neutral expression, and the background features blurred network hardware and glowing blue status LEDs." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyWgPXU9bnF6RyQNdu0eEA8T4BikMVvflEUPmaOuEGlS1uhbL60L7B1fSwjhWlw88bwb7sJMXduVHqpA_vxpcgKSpzUc3Ao338jlvQPUAE7xVEFneaFqCkVlynoSb7_ClulhEA7DnOerbGc3P2k1b3UpoldBUCBs-SJhJSyh4c7DiITGT3MdaUyEmTIFYmdn_kLhiGrVuz_zMxmSl083eAcJRUIy-uSGfMt5LyMDeupMgV3LNXgR9XLFMw86Qse_XkkCF0Rkq64aU"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-white/3 dark:bg-white/3 backdrop-blur-3xl border-r border-white/8 flex flex-col py-md gap-sm">
+<div class="px-lg py-md mb-sm">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary" data-icon="blur_on">blur_on</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface leading-none">Lumina</h2>
+<p class="font-label-mono text-label-mono opacity-50 uppercase tracking-widest mt-1">Network Drive</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="mx-md px-md py-md flex items-center gap-md text-primary border-l-2 border-primary bg-primary/10 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="font-label-mono text-label-mono">All Files</span>
+</a>
+<a class="mx-md px-md py-md flex items-center gap-md text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-white/5 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+<span class="font-label-mono text-label-mono">Shared with Me</span>
+</a>
+<a class="mx-md px-md py-md flex items-center gap-md text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-white/5 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span class="font-label-mono text-label-mono">Recent</span>
+</a>
+<a class="mx-md px-md py-md flex items-center gap-md text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-white/5 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-mono text-label-mono">Admin Dashboard</span>
+</a>
+</nav>
+<div class="px-md mt-auto">
+<button class="w-full py-md bg-primary text-on-primary font-bold rounded-lg flex items-center justify-center gap-sm active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
+<span class="font-label-mono text-label-mono uppercase tracking-wider">Upload File</span>
+</button>
+<div class="mt-lg p-md bg-white/5 rounded-lg border border-white/10">
+<div class="flex justify-between items-center mb-sm">
+<span class="font-label-mono text-label-mono opacity-60">Storage Status</span>
+<span class="material-symbols-outlined text-primary scale-75" data-icon="cloud_queue">cloud_queue</span>
+</div>
+<div class="h-1 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[65%]"></div>
+</div>
+<p class="font-label-mono text-[10px] mt-xs opacity-40">14.2 GB of 25 GB used</p>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="pl-64 pt-16 min-h-screen">
+<div class="p-xl max-w-container-max mx-auto">
+<!-- Breadcrumbs & Actions -->
+<div class="flex justify-between items-center mb-lg">
+<div class="flex items-center gap-sm font-label-mono text-label-mono opacity-60">
+<span class="hover:text-primary cursor-pointer">Root</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-on-surface">Presentation_Assets</span>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 opacity-40 text-[18px]" data-icon="search">search</span>
+<input class="bg-white/5 border-b border-white/20 focus:border-primary focus:ring-0 text-body-sm font-body-sm pl-9 pr-md py-1 w-64 transition-all" placeholder="Search files..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 p-sm rounded" data-icon="grid_view">grid_view</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 p-sm rounded" data-icon="list">list</button>
+</div>
+</div>
+<!-- Role-specific Highlight: Upload Drag & Drop -->
+<section class="mb-xl p-xl rounded-xl border-2 border-dashed border-white/10 bg-white/[0.02] transition-all flex flex-col items-center justify-center gap-md group" id="drop-zone">
+<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<div class="text-center">
+<h3 class="font-headline-md text-headline-md text-on-surface">Upload New Assets</h3>
+<p class="text-on-surface-variant opacity-60 mt-sm">Drag and drop files here, or <span class="text-primary font-medium cursor-pointer underline underline-offset-4">browse your local drive</span></p>
+</div>
+<div class="flex gap-md mt-sm">
+<div class="flex items-center gap-xs text-label-mono text-[10px] opacity-40 uppercase tracking-widest px-sm py-1 border border-white/5 rounded">
+<span class="material-symbols-outlined text-[14px]" data-icon="description">description</span> PDF, DOCX
+                    </div>
+<div class="flex items-center gap-xs text-label-mono text-[10px] opacity-40 uppercase tracking-widest px-sm py-1 border border-white/5 rounded">
+<span class="material-symbols-outlined text-[14px]" data-icon="image">image</span> PNG, JPG
+                    </div>
+<div class="flex items-center gap-xs text-label-mono text-[10px] opacity-40 uppercase tracking-widest px-sm py-1 border border-white/5 rounded">
+<span class="material-symbols-outlined text-[14px]" data-icon="video_file">video_file</span> MP4, MOV
+                    </div>
+</div>
+</section>
+<!-- File Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-lg">
+<!-- Folder -->
+<div class="glass-card p-lg rounded-xl flex flex-col gap-md transition-all group relative">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 flex items-center justify-center rounded-lg bg-tertiary-container/20 text-tertiary-container">
+<span class="material-symbols-outlined text-[32px]" data-icon="folder" style="font-variation-settings: 'FILL' 1;">folder</span>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant opacity-40 hover:opacity-100 p-xs" data-icon="more_vert">more_vert</button>
+</div>
+<div>
+<h4 class="font-body-base text-body-base font-semibold truncate">Q4_Performance_Data</h4>
+<p class="font-body-sm text-body-sm opacity-50 mt-xs">12 items • 145 MB</p>
+</div>
+<div class="flex items-center gap-xs mt-sm">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-background bg-secondary text-[8px] flex items-center justify-center font-bold">JD</div>
+<div class="w-6 h-6 rounded-full border border-background bg-primary text-[8px] flex items-center justify-center font-bold text-on-primary">M</div>
+</div>
+<span class="font-label-mono text-[10px] opacity-40 ml-1">Shared</span>
+</div>
+</div>
+<!-- File: Image -->
+<div class="glass-card rounded-xl overflow-hidden transition-all group relative">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A high-fidelity 3D abstract visualization of a neural network with glowing cyan paths connecting translucent nodes. The aesthetic is clean, technical, and laboratory-like, with a dark background and sharp focus on the central node structure. Soft atmospheric depth blur creates a sense of immense digital space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqnIbgorhI7YucH-8KGOGf2nI9rC9P0gekawd2eiEhzltn-IcQpJr5Oxpa_qG1fMvv_JWnaMk7cS2UE2kSDsKTpDQpjS4Ac8wPJXMTr2tA2VXZQMTuQ2uX-Z-ic6y_QOQglnEDCsUCaUdrOXKQR1hfuzqN7R3NgGFzQDeLHBzI2bbSO1uytp08TQ2pFd2Hy5pAYNbAknKivSbFNDJvjG0vDfJdVdpz4rQx7pk-CGG6hxkasGCdTPTCrOu5d98t9VCdCyfSfgZSEbc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-center mb-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="image">image</span>
+<span class="font-body-base text-body-base font-semibold truncate max-w-[120px]">header_bg_v2.png</span>
+</div>
+<button class="menu-trigger material-symbols-outlined text-on-surface-variant opacity-40 hover:opacity-100 p-xs" data-icon="more_vert">more_vert</button>
+<!-- Context Menu (hidden by default) -->
+<div class="file-menu hidden absolute right-2 top-10 z-10 bg-surface-container shadow-2xl border border-white/10 rounded-lg py-1 w-32">
+<button class="w-full px-md py-sm text-left text-body-sm hover:bg-white/5 flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span> Edit Name
+                                </button>
+<button class="w-full px-md py-sm text-left text-body-sm text-error hover:bg-error/10 flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="delete">delete</span> Delete
+                                </button>
+</div>
+</div>
+<div class="flex justify-between items-center font-body-sm text-body-sm opacity-50">
+<span>2.4 MB</span>
+<span>Yesterday, 4:12 PM</span>
+</div>
+</div>
+</div>
+<!-- File: Document -->
+<div class="glass-card p-lg rounded-xl flex flex-col gap-md transition-all group relative">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 flex items-center justify-center rounded-lg bg-primary-container/20 text-primary">
+<span class="material-symbols-outlined text-[32px]" data-icon="description">description</span>
+</div>
+<button class="menu-trigger material-symbols-outlined text-on-surface-variant opacity-40 hover:opacity-100 p-xs" data-icon="more_vert">more_vert</button>
+<div class="file-menu hidden absolute right-2 top-10 z-10 bg-surface-container shadow-2xl border border-white/10 rounded-lg py-1 w-32">
+<button class="w-full px-md py-sm text-left text-body-sm hover:bg-white/5 flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span> Edit Name
+                            </button>
+<button class="w-full px-md py-sm text-left text-body-sm text-error hover:bg-error/10 flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="delete">delete</span> Delete
+                            </button>
+</div>
+</div>
+<div>
+<h4 class="font-body-base text-body-base font-semibold truncate">Lumina_Whitepaper_2024</h4>
+<p class="font-body-sm text-body-sm opacity-50 mt-xs">PDF • 842 KB</p>
+</div>
+<div class="flex items-center gap-sm mt-sm">
+<div class="flex items-center gap-xs px-2 py-1 bg-green-500/10 text-green-400 rounded-full text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+                            ACTIVE SYNC
+                        </div>
+</div>
+</div>
+<!-- File: Video -->
+<div class="glass-card p-lg rounded-xl flex flex-col gap-md transition-all group relative">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 flex items-center justify-center rounded-lg bg-tertiary-container/20 text-tertiary">
+<span class="material-symbols-outlined text-[32px]" data-icon="video_file">video_file</span>
+</div>
+<button class="menu-trigger material-symbols-outlined text-on-surface-variant opacity-40 hover:opacity-100 p-xs" data-icon="more_vert">more_vert</button>
+<div class="file-menu hidden absolute right-2 top-10 z-10 bg-surface-container shadow-2xl border border-white/10 rounded-lg py-1 w-32">
+<button class="w-full px-md py-sm text-left text-body-sm hover:bg-white/5 flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span> Edit Name
+                            </button>
+<button class="w-full px-md py-sm text-left text-body-sm text-error hover:bg-error/10 flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="delete">delete</span> Delete
+                            </button>
+</div>
+</div>
+<div>
+<h4 class="font-body-base text-body-base font-semibold truncate">Interface_Preview_Final</h4>
+<p class="font-body-sm text-body-sm opacity-50 mt-xs">MP4 • 12.8 MB</p>
+</div>
+<div class="mt-sm flex gap-xs">
+<div class="h-1 bg-white/10 flex-1 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-full"></div>
+</div>
+</div>
+</div>
+<!-- New File Placeholder (Contributor Role) -->
+<button class="p-lg rounded-xl border border-dashed border-white/20 hover:border-primary/50 hover:bg-primary/5 transition-all flex flex-col items-center justify-center gap-sm group">
+<span class="material-symbols-outlined text-[40px] opacity-20 group-hover:opacity-100 group-hover:scale-110 transition-all" data-icon="add_circle">add_circle</span>
+<span class="font-label-mono text-label-mono opacity-40 group-hover:opacity-100">Add New Entry</span>
+</button>
+</div>
+<!-- Recently Modified Table Section -->
+<section class="mt-xl">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent Activity</h3>
+<button class="text-primary font-label-mono text-label-mono hover:underline">View All</button>
+</div>
+<div class="glass-card rounded-xl overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-white/5 font-label-mono text-label-mono opacity-60 uppercase tracking-widest text-[10px]">
+<th class="px-lg py-md">File Name</th>
+<th class="px-lg py-md">Owner</th>
+<th class="px-lg py-md">Modified</th>
+<th class="px-lg py-md">Size</th>
+<th class="px-lg py-md text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-body-sm">
+<tr class="hover:bg-white/2 transition-colors border-b border-white/5">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary scale-75" data-icon="draft">draft</span>
+<span class="font-medium">System_Log_2405.txt</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-[8px] flex items-center justify-center">SN</span>
+<span>System Node</span>
+</div>
+</td>
+<td class="px-lg py-md opacity-60">2 mins ago</td>
+<td class="px-lg py-md opacity-60">12 KB</td>
+<td class="px-lg py-md text-right">
+<button class="material-symbols-outlined opacity-40 hover:opacity-100" data-icon="download">download</button>
+</td>
+</tr>
+<tr class="hover:bg-white/2 transition-colors border-b border-white/5">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-tertiary scale-75" data-icon="table_chart">table_chart</span>
+<span class="font-medium">Annual_Projections.xlsx</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<span class="w-5 h-5 rounded-full bg-primary/20 text-primary text-[8px] flex items-center justify-center">UP</span>
+<span>User Plus</span>
+</div>
+</td>
+<td class="px-lg py-md opacity-60">1 hour ago</td>
+<td class="px-lg py-md opacity-60">4.5 MB</td>
+<td class="px-lg py-md text-right">
+<button class="material-symbols-outlined opacity-40 hover:opacity-100" data-icon="download">download</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+<script>
+        // Micro-interactions for Drag and Drop Zone
+        const dropZone = document.getElementById('drop-zone');
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drop-zone-active');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drop-zone-active');
+            });
+        });
+
+        // Simple Context Menu Logic
+        document.querySelectorAll('.menu-trigger').forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Close other menus first
+                document.querySelectorAll('.file-menu').forEach(m => m.classList.add('hidden'));
+                // Toggle current
+                const menu = trigger.nextElementSibling;
+                menu.classList.toggle('hidden');
+            });
+        });
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.file-menu').forEach(m => m.classList.add('hidden'));
+        });
+
+        // Interaction for "Edit Name" (mock)
+        document.querySelectorAll('.file-menu button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const action = btn.innerText.trim();
+                const fileName = btn.closest('.glass-card').querySelector('h4, span.font-semibold').innerText;
+                console.log(`${action} triggered for: ${fileName}`);
+                // In a real app, this would trigger a modal or inline edit
+            });
+        });
+    </script>
+</body></html>

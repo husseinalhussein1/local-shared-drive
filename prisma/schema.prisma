@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int           @id @default(autoincrement())
+  name          String
+  email         String        @unique
+  password      String
+  role          Role          @default(USER)
+  createdAt     DateTime      @default(now())
+  foldersOwned  Folder[]      @relation("FolderOwner")
+  filesUploaded File[]        @relation("FileUploader")
+  downloads     DownloadLog[] @relation("Downloader")
+}
+
+model Folder {
+  id          Int      @id @default(autoincrement())
+  name        String
+  isPublic    Boolean  @default(false)
+  createdById Int
+  createdBy   User     @relation("FolderOwner", fields: [createdById], references: [id])
+  files       File[]
+  createdAt   DateTime @default(now())
+}
+
+model File {
+  id           Int           @id @default(autoincrement())
+  originalName String
+  storedName   String
+  size         Int
+  mimeType     String
+  folderId     Int
+  folder       Folder        @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  uploadedById Int
+  uploadedBy   User          @relation("FileUploader", fields: [uploadedById], references: [id])
+  createdAt    DateTime      @default(now())
+  downloads    DownloadLog[]
+}
+
+model DownloadLog {
+  id             Int      @id @default(autoincrement())
+  fileId         Int
+  file           File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  downloadedById Int
+  downloadedBy   User     @relation("Downloader", fields: [downloadedById], references: [id])
+  createdAt      DateTime @default(now())
+}
+
+enum Role {
+  USER
+  USER_PLUS
+  ADMIN
+}
