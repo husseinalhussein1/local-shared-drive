@@ -33,6 +33,10 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
         />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/swagger-ui-dist/swagger-ui.css"
+        />
       </head>
       <body className="bg-background text-on-surface min-h-screen antialiased selection:bg-primary-container/30">
         {children}

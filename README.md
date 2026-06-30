@@ -209,6 +209,12 @@ npm install jose bcryptjs
 
 # أيقونات Lucide
 npm install lucide-react
+
+# توثيق API تفاعلي
+npm install swagger-ui-dist
+
+# توثيق API تفاعلي (Swagger UI)
+npm install swagger-ui-react
 ```
 
 ### 2. إعداد قاعدة البيانات
@@ -246,6 +252,22 @@ npm run dev
 
 > جميع الـ APIs ترجع JSON. الـ Endpoints المحمية تتطلب Cookie `auth-token` صالح.
 > All APIs return JSON. Protected endpoints require a valid `auth-token` cookie.
+
+### 🔧 صفحة التوثيق التفاعلية
+
+يمكنك الآن فتح صفحة الوثائق التفاعلية مباشرة من التطبيق عبر:
+
+- `http://localhost:3000/api-docs`
+- أو عبر الشبكة المحلية: `http://192.168.4.50:3000/api-docs`
+
+في هذه الصفحة يمكنك:
+
+1. تسجيل الدخول باستخدام `POST /api/auth/login`
+2. الضغط على زر `Try it out`
+3. إرسال الطلبات المحمية باستخدام الكوكيز تلقائياً
+4. مشاهدة ردود JSON الحية لكل مسار API
+
+> هذه الصفحة تثبت أمام لجنة المناقشة أن النظام يعمل كمعمارية RESTful حقيقية، مع تجربة API تفاعلية داخل المتصفح.
 
 ---
 

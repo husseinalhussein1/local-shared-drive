@@ -1,0 +1,582 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Lumina Network API Documentation",
+    "description": "توثيق تفاعلي لواجهات REST API في مشروع Lumina Network.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Lumina Network",
+      "email": "support@lumina.local"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    },
+    {
+      "url": "http://192.168.4.50:3000",
+      "description": "Local LAN server (same host used in dev script)"
+    }
+  ],
+  "security": [
+    {
+      "cookieAuth": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "auth-token"
+      }
+    },
+    "schemas": {
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "admin@local.net"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "admin123"
+          }
+        }
+      },
+      "CreateUserRequest": {
+        "type": "object",
+        "required": ["name", "email", "password", "userRole"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "New User"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "newuser@lumina.local"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "UserPass123"
+          },
+          "userRole": {
+            "type": "string",
+            "enum": ["USER", "USER_PLUS"],
+            "example": "USER_PLUS"
+          }
+        }
+      },
+      "CreateFolderRequest": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Project Documents"
+          },
+          "isPublic": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "UploadFileRequest": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          },
+          "folderId": {
+            "type": "integer",
+            "example": 3
+          }
+        }
+      },
+      "DownloadFileRequest": {
+        "type": "object",
+        "required": ["fileId"],
+        "properties": {
+          "fileId": {
+            "type": "integer",
+            "example": 5
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "summary": "تسجيل الدخول وإنشاء JWT في httpOnly Cookie",
+        "description": "يتحقق من البريد الإلكتروني وكلمة المرور ثم يضع التوكن في كوكي HttpOnly باسم auth-token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "تم تسجيل الدخول بنجاح.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Login successful.",
+                  "user": {
+                    "id": 1,
+                    "name": "Admin User",
+                    "email": "admin@lumina.local",
+                    "role": "ADMIN"
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Missing request fields." },
+          "401": { "description": "Invalid credentials." },
+          "500": { "description": "Server error." }
+        },
+        "security": []
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "تسجيل الخروج وإلغاء تفعيل كوكي JWT",
+        "description": "يمسح كوكي auth-token عن طريق تعيينه إلى قيمة فارغة وتاريخ انقضاء سابق.",
+        "responses": {
+          "200": {
+            "description": "Logged out successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Logged out successfully."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "summary": "جلب معلومات المستخدم الحالي من الكوكيز",
+        "description": "يفحص الكوكي auth-token ويعيد بيانات المستخدم إذا كان التوكن صالحاً.",
+        "responses": {
+          "200": {
+            "description": "User data returned successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "user": {
+                    "id": 1,
+                    "name": "Admin User",
+                    "email": "admin@lumina.local",
+                    "role": "ADMIN"
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized." }
+        }
+      }
+    },
+    "/api/admin/users/create": {
+      "post": {
+        "summary": "إنشاء مستخدم جديد (لأصحاب دور ADMIN فقط)",
+        "description": "يُنشئ مستخدماً جديداً ضمن النظام ويجب أن يكون الطلب مصدراً من مسؤول مُسجل الدخول.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "User created successfully.",
+                  "user": {
+                    "id": 7,
+                    "name": "New User",
+                    "email": "newuser@lumina.local",
+                    "role": "USER_PLUS",
+                    "createdAt": "2026-06-30T10:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid request data." },
+          "403": { "description": "Forbidden: administrator access required." },
+          "409": { "description": "Email already exists." },
+          "500": { "description": "Server error." }
+        }
+      }
+    },
+    "/api/folders": {
+      "get": {
+        "summary": "جلب المجلدات والملفات حسب الصلاحية",
+        "description": "يعرض جميع المجلدات المتاحة للمستخدم الحالي. ADMIN و USER_PLUS يظهر لهم جميع المجلدات، و USER يرى المجلدات العامة فقط.",
+        "responses": {
+          "200": {
+            "description": "A list of folders and their files.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "folders": [
+                    {
+                      "id": 2,
+                      "name": "Public Files",
+                      "isPublic": true,
+                      "createdBy": {
+                        "id": 1,
+                        "name": "Admin User",
+                        "email": "admin@lumina.local"
+                      },
+                      "files": [
+                        {
+                          "id": 5,
+                          "originalName": "project-plan.pdf",
+                          "storedName": "uuid.pdf",
+                          "size": 478322,
+                          "mimeType": "application/pdf",
+                          "uploadedBy": {
+                            "id": 2,
+                            "name": "Regular User",
+                            "email": "user@lumina.local"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error." }
+        }
+      }
+    },
+    "/api/folders/create": {
+      "post": {
+        "summary": "إنشاء مجلد وهمي جديد",
+        "description": "ينشئ مجلداً وهمياً جديداً في النظام. يتطلب دور USER_PLUS أو ADMIN.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFolderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Folder created successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Folder created successfully.",
+                  "folder": {
+                    "id": 10,
+                    "name": "New Folder",
+                    "isPublic": true,
+                    "createdBy": {
+                      "id": 3,
+                      "name": "Plus User",
+                      "email": "plususer@lumina.local"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid folder data." },
+          "403": { "description": "Forbidden: insufficient permissions." },
+          "500": { "description": "Server error." }
+        }
+      }
+    },
+    "/api/folders/{id}": {
+      "patch": {
+        "summary": "تغيير صلاحية المجلد (ADMIN فقط)",
+        "description": "يبدّل الخاصية isPublic لمجلد محدد. يتطلب دور ADMIN.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "isPublic": { "type": "boolean", "example": true }
+                },
+                "required": ["isPublic"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Folder visibility updated successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Folder is now public.",
+                  "folder": {
+                    "id": 8,
+                    "name": "Project Resources",
+                    "isPublic": true
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid isPublic value." },
+          "403": { "description": "Forbidden: Administrator access required." },
+          "404": { "description": "Folder not found." },
+          "500": { "description": "Server error." }
+        }
+      },
+      "delete": {
+        "summary": "حذف المجلد وكل ملفاته",
+        "description": "يحذف المجلد المحدد وملفاته من قاعدة البيانات ونظام الملفات. يتطلب دور USER_PLUS أو ADMIN.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Folder deleted successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Folder and all its files deleted successfully."
+                }
+              }
+            }
+          },
+          "403": { "description": "Forbidden: Insufficient permissions." },
+          "404": { "description": "Folder not found." },
+          "500": { "description": "Server error." }
+        }
+      }
+    },
+    "/api/files/upload": {
+      "post": {
+        "summary": "رفع ملف إلى مجلد uploads",
+        "description": "يرفع ملفاً جديداً باستخدام form-data ويخزنه في /uploads مع بيانات مرجعية في قاعدة البيانات.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "folderId": {
+                    "type": "integer",
+                    "example": 3
+                  }
+                },
+                "required": ["file", "folderId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "File uploaded successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "File uploaded successfully.",
+                  "file": {
+                    "id": 12,
+                    "originalName": "report.pdf",
+                    "size": 234567,
+                    "mimeType": "application/pdf",
+                    "folderId": 3,
+                    "uploadedBy": {
+                      "id": 2,
+                      "name": "Regular User",
+                      "email": "user@lumina.local"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Missing file or folderId." },
+          "403": { "description": "Forbidden: insufficient permissions." },
+          "404": { "description": "Target folder not found." },
+          "500": { "description": "Server error." }
+        }
+      }
+    },
+    "/api/files/download": {
+      "post": {
+        "summary": "تحميل ملف وتسجيل الحدث في السجل",
+        "description": "يُرجع الملف المطلوب كاستجابة ثنائية ويُسجل العملية في جدول downloadLog.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadFileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File binary response.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": { "description": "Missing fileId." },
+          "403": { "description": "Forbidden: no access to file." },
+          "404": { "description": "File not found." },
+          "500": { "description": "Server error." }
+        }
+      }
+    },
+    "/api/files/{id}": {
+      "delete": {
+        "summary": "حذف ملف محدد",
+        "description": "يحذف الملف من نظام الملفات وقاعدة البيانات. يتطلب USER_PLUS أو ADMIN.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File deleted successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "File deleted successfully."
+                }
+              }
+            }
+          },
+          "403": { "description": "Forbidden: Insufficient permissions." },
+          "404": { "description": "File not found." },
+          "500": { "description": "Server error." }
+        }
+      }
+    },
+    "/api/admin/logs": {
+      "get": {
+        "summary": "جلب سجل الحركات والإحصائيات للآدمن",
+        "description": "يعرض إحصائيات الملفات والمجلدات وجميع سجلات التنزيل الأخيرة لأصحاب دور ADMIN.",
+        "responses": {
+          "200": {
+            "description": "Logs and statistics for admin users.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "stats": {
+                    "totalFiles": 12,
+                    "totalFolders": 6,
+                    "publicFolders": 3,
+                    "privateFolders": 3,
+                    "totalUsers": 8,
+                    "totalDownloads": 24,
+                    "totalStorageBytes": 12345678,
+                    "totalStorageMB": 11.77
+                  },
+                  "logs": [
+                    {
+                      "id": 45,
+                      "createdAt": "2026-06-30T11:25:30.000Z",
+                      "file": {
+                        "id": 5,
+                        "originalName": "design.pdf",
+                        "size": 345123,
+                        "mimeType": "application/pdf",
+                        "uploadedBy": {
+                          "id": 2,
+                          "name": "Regular User",
+                          "email": "user@lumina.local"
+                        },
+                        "folder": {
+                          "id": 3,
+                          "name": "Project Files"
+                        }
+                      },
+                      "downloadedBy": {
+                        "id": 1,
+                        "name": "Admin User",
+                        "email": "admin@lumina.local",
+                        "role": "ADMIN"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": { "description": "Forbidden: administrator access required." },
+          "500": { "description": "Server error." }
+        }
+      }
+    }
+  }
+}
