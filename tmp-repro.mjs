@@ -1,0 +1,1 @@
+import fs from "fs"; import postcss from "postcss"; import tailwind from "@tailwindcss/postcss"; const css = fs.readFileSync("app/globals.css","utf8"); postcss([tailwind()]).process(css,{from:"app/globals.css"}).then(r=>console.log("OK")).catch(e=>{ console.error(e.stack||e); process.exit(1); });
