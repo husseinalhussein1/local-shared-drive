@@ -69,7 +69,7 @@ export default function ApiDocsPage() {
   return (
     <main className="min-h-screen py-10 px-4 sm:px-8 lg:px-12 bg-slate-50 text-slate-900">
       <div className="mx-auto max-w-[1400px]">
-        <div className="p-6 rounded-[32px] border border-slate-200/70 bg-white shadow-sm mb-8">
+        {/* <div className="p-6 rounded-[32px] border border-slate-200/70 bg-white shadow-sm mb-8">
           <h1 className="text-3xl font-semibold mb-3">توثيق الـ API التفاعلي</h1>
           <p className="text-sm leading-7 text-slate-600 max-w-3xl">
             هذه الصفحة تعرض المواصفات التفاعلية لكل مسار API موجود في المشروع.
@@ -81,7 +81,7 @@ export default function ApiDocsPage() {
             جرّب المسارات المحمية مثل <code>POST /api/admin/users/create</code> و
             <code>GET /api/admin/logs</code> بدون الخروج من المتصفح.
           </p>
-        </div>
+        </div> */}
 
         {error ? (
           <div className="p-6 rounded-[32px] border border-red-500/20 bg-red-50 text-red-800">
