@@ -1,14 +1,13 @@
 {
   "openapi": "3.0.3",
-  "info": {
-    "title": "Lumina Network API Documentation",
-    "description": "توثيق تفاعلي لواجهات REST API في مشروع Lumina Network.",
-    "version": "1.0.0",
-    "contact": {
-      "name": "Lumina Network",
-      "email": "support@lumina.local"
-    }
-  },
+  
+ 
+  "tags": [
+    { "name": "Auth", "description": "عمليات التحقق والتحكم بالجلسات وتوثيق الهوية" },
+    { "name": "Folders", "description": "إدارة المجلدات، التحكم بصلاحيات العرض وتعديل الخصائص" },
+    { "name": "Files", "description": "التعامل مع نظام الملفات من رفع، تحميل وحذف" },
+    { "name": "Admin", "description": "لوحة التحكم الخاصة بالمسؤول، الإحصائيات الشاملة وسجل العمليات" }
+  ],
   "servers": [
     {
       "url": "http://localhost:3000",
@@ -37,78 +36,40 @@
         "type": "object",
         "required": ["email", "password"],
         "properties": {
-          "email": {
-            "type": "string",
-            "format": "email",
-            "example": "admin@local.net"
-          },
-          "password": {
-            "type": "string",
-            "format": "password",
-            "example": "admin123"
-          }
+          "email": { "type": "string", "format": "email", "example": "admin@local.net" },
+          "password": { "type": "string", "format": "password", "example": "admin123" }
         }
       },
       "CreateUserRequest": {
         "type": "object",
         "required": ["name", "email", "password", "userRole"],
         "properties": {
-          "name": {
-            "type": "string",
-            "example": "New User"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "example": "newuser@lumina.local"
-          },
-          "password": {
-            "type": "string",
-            "format": "password",
-            "example": "UserPass123"
-          },
-          "userRole": {
-            "type": "string",
-            "enum": ["USER", "USER_PLUS"],
-            "example": "USER_PLUS"
-          }
+          "name": { "type": "string", "example": "New User" },
+          "email": { "type": "string", "format": "email", "example": "newuser@lumina.local" },
+          "password": { "type": "string", "format": "password", "example": "UserPass123" },
+          "userRole": { "type": "string", "enum": ["USER", "USER_PLUS"], "example": "USER_PLUS" }
         }
       },
       "CreateFolderRequest": {
         "type": "object",
         "required": ["name"],
         "properties": {
-          "name": {
-            "type": "string",
-            "example": "Project Documents"
-          },
-          "isPublic": {
-            "type": "boolean",
-            "example": true
-          }
+          "name": { "type": "string", "example": "Project Documents" },
+          "isPublic": { "type": "boolean", "example": true }
         }
       },
       "UploadFileRequest": {
         "type": "object",
         "properties": {
-          "file": {
-            "type": "string",
-            "format": "binary"
-          },
-          "folderId": {
-            "type": "integer",
-            "example": 3
-          }
+          "file": { "type": "string", "format": "binary" },
+          "folderId": { "type": "integer", "example": 3 }
         }
       },
       "DownloadFileRequest": {
         "type": "object",
         "required": ["fileId"],
         "properties": {
-          "fileId": {
-            "type": "integer",
-            "example": 5
-          }
+          "fileId": { "type": "integer", "example": 5 }
         }
       }
     }
@@ -116,15 +77,14 @@
   "paths": {
     "/api/auth/login": {
       "post": {
+        "tags": ["Auth"],
         "summary": "تسجيل الدخول وإنشاء JWT في httpOnly Cookie",
         "description": "يتحقق من البريد الإلكتروني وكلمة المرور ثم يضع التوكن في كوكي HttpOnly باسم auth-token.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
-              }
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
             }
           }
         },
@@ -136,12 +96,7 @@
                 "example": {
                   "success": true,
                   "message": "Login successful.",
-                  "user": {
-                    "id": 1,
-                    "name": "Admin User",
-                    "email": "admin@lumina.local",
-                    "role": "ADMIN"
-                  }
+                  "user": { "id": 1, "name": "Admin User", "email": "admin@lumina.local", "role": "ADMIN" }
                 }
               }
             }
@@ -155,6 +110,7 @@
     },
     "/api/auth/logout": {
       "post": {
+        "tags": ["Auth"],
         "summary": "تسجيل الخروج وإلغاء تفعيل كوكي JWT",
         "description": "يمسح كوكي auth-token عن طريق تعيينه إلى قيمة فارغة وتاريخ انقضاء سابق.",
         "responses": {
@@ -162,10 +118,7 @@
             "description": "Logged out successfully.",
             "content": {
               "application/json": {
-                "example": {
-                  "success": true,
-                  "message": "Logged out successfully."
-                }
+                "example": { "success": true, "message": "Logged out successfully." }
               }
             }
           }
@@ -174,6 +127,7 @@
     },
     "/api/auth/me": {
       "get": {
+        "tags": ["Auth"],
         "summary": "جلب معلومات المستخدم الحالي من الكوكيز",
         "description": "يفحص الكوكي auth-token ويعيد بيانات المستخدم إذا كان التوكن صالحاً.",
         "responses": {
@@ -183,12 +137,7 @@
               "application/json": {
                 "example": {
                   "success": true,
-                  "user": {
-                    "id": 1,
-                    "name": "Admin User",
-                    "email": "admin@lumina.local",
-                    "role": "ADMIN"
-                  }
+                  "user": { "id": 1, "name": "Admin User", "email": "admin@lumina.local", "role": "ADMIN" }
                 }
               }
             }
@@ -199,15 +148,14 @@
     },
     "/api/admin/users/create": {
       "post": {
+        "tags": ["Admin"],
         "summary": "إنشاء مستخدم جديد (لأصحاب دور ADMIN فقط)",
         "description": "يُنشئ مستخدماً جديداً ضمن النظام ويجب أن يكون الطلب مصدراً من مسؤول مُسجل الدخول.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserRequest"
-              }
+              "schema": { "$ref": "#/components/schemas/CreateUserRequest" }
             }
           }
         },
@@ -219,13 +167,7 @@
                 "example": {
                   "success": true,
                   "message": "User created successfully.",
-                  "user": {
-                    "id": 7,
-                    "name": "New User",
-                    "email": "newuser@lumina.local",
-                    "role": "USER_PLUS",
-                    "createdAt": "2026-06-30T10:00:00.000Z"
-                  }
+                  "user": { "id": 7, "name": "New User", "email": "newuser@lumina.local", "role": "USER_PLUS", "createdAt": "2026-06-30T10:00:00.000Z" }
                 }
               }
             }
@@ -239,6 +181,7 @@
     },
     "/api/folders": {
       "get": {
+        "tags": ["Folders"],
         "summary": "جلب المجلدات والملفات حسب الصلاحية",
         "description": "يعرض جميع المجلدات المتاحة للمستخدم الحالي. ADMIN و USER_PLUS يظهر لهم جميع المجلدات، و USER يرى المجلدات العامة فقط.",
         "responses": {
@@ -253,11 +196,7 @@
                       "id": 2,
                       "name": "Public Files",
                       "isPublic": true,
-                      "createdBy": {
-                        "id": 1,
-                        "name": "Admin User",
-                        "email": "admin@lumina.local"
-                      },
+                      "createdBy": { "id": 1, "name": "Admin User", "email": "admin@lumina.local" },
                       "files": [
                         {
                           "id": 5,
@@ -265,11 +204,7 @@
                           "storedName": "uuid.pdf",
                           "size": 478322,
                           "mimeType": "application/pdf",
-                          "uploadedBy": {
-                            "id": 2,
-                            "name": "Regular User",
-                            "email": "user@lumina.local"
-                          }
+                          "uploadedBy": { "id": 2, "name": "Regular User", "email": "user@lumina.local" }
                         }
                       ]
                     }
@@ -284,15 +219,14 @@
     },
     "/api/folders/create": {
       "post": {
+        "tags": ["Folders"],
         "summary": "إنشاء مجلد وهمي جديد",
         "description": "ينشئ مجلداً وهمياً جديداً في النظام. يتطلب دور USER_PLUS أو ADMIN.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateFolderRequest"
-              }
+              "schema": { "$ref": "#/components/schemas/CreateFolderRequest" }
             }
           }
         },
@@ -308,11 +242,7 @@
                     "id": 10,
                     "name": "New Folder",
                     "isPublic": true,
-                    "createdBy": {
-                      "id": 3,
-                      "name": "Plus User",
-                      "email": "plususer@lumina.local"
-                    }
+                    "createdBy": { "id": 3, "name": "Plus User", "email": "plususer@lumina.local" }
                   }
                 }
               }
@@ -326,15 +256,11 @@
     },
     "/api/folders/{id}": {
       "patch": {
+        "tags": ["Folders"],
         "summary": "تغيير صلاحية المجلد (ADMIN فقط)",
         "description": "يبدّل الخاصية isPublic لمجلد محدد. يتطلب دور ADMIN.",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "integer" }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
         ],
         "requestBody": {
           "required": true,
@@ -342,9 +268,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {
-                  "isPublic": { "type": "boolean", "example": true }
-                },
+                "properties": { "isPublic": { "type": "boolean", "example": true } },
                 "required": ["isPublic"]
               }
             }
@@ -355,15 +279,7 @@
             "description": "Folder visibility updated successfully.",
             "content": {
               "application/json": {
-                "example": {
-                  "success": true,
-                  "message": "Folder is now public.",
-                  "folder": {
-                    "id": 8,
-                    "name": "Project Resources",
-                    "isPublic": true
-                  }
-                }
+                "example": { "success": true, "message": "Folder is now public.", "folder": { "id": 8, "name": "Project Resources", "isPublic": true } }
               }
             }
           },
@@ -374,25 +290,18 @@
         }
       },
       "delete": {
+        "tags": ["Folders"],
         "summary": "حذف المجلد وكل ملفاته",
         "description": "يحذف المجلد المحدد وملفاته من قاعدة البيانات ونظام الملفات. يتطلب دور USER_PLUS أو ADMIN.",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "integer" }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
         ],
         "responses": {
           "200": {
             "description": "Folder deleted successfully.",
             "content": {
               "application/json": {
-                "example": {
-                  "success": true,
-                  "message": "Folder and all its files deleted successfully."
-                }
+                "example": { "success": true, "message": "Folder and all its files deleted successfully." }
               }
             }
           },
@@ -404,6 +313,7 @@
     },
     "/api/files/upload": {
       "post": {
+        "tags": ["Files"],
         "summary": "رفع ملف إلى مجلد uploads",
         "description": "يرفع ملفاً جديداً باستخدام form-data ويخزنه في /uploads مع بيانات مرجعية في قاعدة البيانات.",
         "requestBody": {
@@ -413,14 +323,8 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "folderId": {
-                    "type": "integer",
-                    "example": 3
-                  }
+                  "file": { "type": "string", "format": "binary" },
+                  "folderId": { "type": "integer", "example": 3 }
                 },
                 "required": ["file", "folderId"]
               }
@@ -435,18 +339,7 @@
                 "example": {
                   "success": true,
                   "message": "File uploaded successfully.",
-                  "file": {
-                    "id": 12,
-                    "originalName": "report.pdf",
-                    "size": 234567,
-                    "mimeType": "application/pdf",
-                    "folderId": 3,
-                    "uploadedBy": {
-                      "id": 2,
-                      "name": "Regular User",
-                      "email": "user@lumina.local"
-                    }
-                  }
+                  "file": { "id": 12, "originalName": "report.pdf", "size": 234567, "mimeType": "application/pdf", "folderId": 3, "uploadedBy": { "id": 2, "name": "Regular User", "email": "user@lumina.local" } }
                 }
               }
             }
@@ -460,15 +353,14 @@
     },
     "/api/files/download": {
       "post": {
+        "tags": ["Files"],
         "summary": "تحميل ملف وتسجيل الحدث في السجل",
         "description": "يُرجع الملف المطلوب كاستجابة ثنائية ويُسجل العملية في جدول downloadLog.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DownloadFileRequest"
-              }
+              "schema": { "$ref": "#/components/schemas/DownloadFileRequest" }
             }
           }
         },
@@ -477,10 +369,7 @@
             "description": "File binary response.",
             "content": {
               "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
+                "schema": { "type": "string", "format": "binary" }
               }
             }
           },
@@ -493,25 +382,18 @@
     },
     "/api/files/{id}": {
       "delete": {
+        "tags": ["Files"],
         "summary": "حذف ملف محدد",
         "description": "يحذف الملف من نظام الملفات وقاعدة البيانات. يتطلب USER_PLUS أو ADMIN.",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "integer" }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
         ],
         "responses": {
           "200": {
             "description": "File deleted successfully.",
             "content": {
               "application/json": {
-                "example": {
-                  "success": true,
-                  "message": "File deleted successfully."
-                }
+                "example": { "success": true, "message": "File deleted successfully." }
               }
             }
           },
@@ -523,6 +405,7 @@
     },
     "/api/admin/logs": {
       "get": {
+        "tags": ["Admin"],
         "summary": "جلب سجل الحركات والإحصائيات للآدمن",
         "description": "يعرض إحصائيات الملفات والمجلدات وجميع سجلات التنزيل الأخيرة لأصحاب دور ADMIN.",
         "responses": {
@@ -532,42 +415,9 @@
               "application/json": {
                 "example": {
                   "success": true,
-                  "stats": {
-                    "totalFiles": 12,
-                    "totalFolders": 6,
-                    "publicFolders": 3,
-                    "privateFolders": 3,
-                    "totalUsers": 8,
-                    "totalDownloads": 24,
-                    "totalStorageBytes": 12345678,
-                    "totalStorageMB": 11.77
-                  },
+                  "stats": { "totalFiles": 12, "totalFolders": 6, "publicFolders": 3, "privateFolders": 3, "totalUsers": 8, "totalDownloads": 24, "totalStorageBytes": 12345678, "totalStorageMB": 11.77 },
                   "logs": [
-                    {
-                      "id": 45,
-                      "createdAt": "2026-06-30T11:25:30.000Z",
-                      "file": {
-                        "id": 5,
-                        "originalName": "design.pdf",
-                        "size": 345123,
-                        "mimeType": "application/pdf",
-                        "uploadedBy": {
-                          "id": 2,
-                          "name": "Regular User",
-                          "email": "user@lumina.local"
-                        },
-                        "folder": {
-                          "id": 3,
-                          "name": "Project Files"
-                        }
-                      },
-                      "downloadedBy": {
-                        "id": 1,
-                        "name": "Admin User",
-                        "email": "admin@lumina.local",
-                        "role": "ADMIN"
-                      }
-                    }
+                    { "id": 45, "createdAt": "2026-06-30T11:25:30.000Z", "file": { "id": 5, "originalName": "design.pdf", "size": 345123, "mimeType": "application/pdf", "uploadedBy": { "id": 2, "name": "Regular User", "email": "user@lumina.local" }, "folder": { "id": 3, "name": "Project Files" } }, "downloadedBy": { "id": 1, "name": "Admin User", "email": "admin@lumina.local", "role": "ADMIN" } }
                   ]
                 }
               }
